@@ -29,7 +29,7 @@ steering 문서(product, tech, structure, frontend-conventions, db-conventions)�
 2. task 도메인 (WISH / TODO / DOING / DONE)
    - 생성, 목록 조회(상태별) API
    - 상태 전환: 체크하면 DONE(done_at 기록), ▶ 하면 DOING(동시에 1개만, 기존 DOING은 TODO로 되돌림), WISH → TODO 승격
-3. 화면 (정적 index.html, Bootstrap 5, 바닐라 JS)
+3. 화면 (정적 index.html, Bootstrap 5.3.8, 바닐라 JS)
    - 상단 바: 시계, 날짜·요일·연도, 지금 집중할 일, 오늘 진행률
    - 가운데 "오늘 할 일" 패널 (최대 7개 표시, DOING 강조, 우선순위·마감 색 구분, 체크·▶ 버튼, 빠른 추가 입력창)
    - 오른쪽 위 "한 일" 패널 (오늘 완료한 항목 + 완료 시각)
@@ -41,8 +41,8 @@ steering 문서(product, tech, structure, frontend-conventions, db-conventions)�
 수정·삭제·하고 싶은 일 추가·카테고리·우선순위 지정(Spec 2), event와 오늘 일정 패널(Spec 3), 하단 바(Spec 4), 반복 일정, 외부 연동, 로그인
 
 [요구사항 작성 전에 먼저 나에게 물어볼 것]
-- 마감 저장 방식 (시각 있는 마감과 "내일", "이번 주" 같은 날짜·기간 마감이 섞여 있음)
 - priority를 프로토타입대로 높음/보통/낮음으로 갈지
+(마감 저장 방식과 삭제 방식은 steering에서 이미 확정했으니 다시 묻지 말 것)
 - "오늘 할 일"을 프로토타입처럼 TODO·DOING 전부로 할지
 - 하고 싶은 일의 카테고리 목록
 ```
@@ -64,8 +64,8 @@ steering 문서와 product.md의 "편집 기능" 섹션을 따라줘.
 - 여는 방식: 행의 제목 영역 클릭 → 수정 모달, 하고 싶은 일 헤더의 + 버튼 → 추가 모달
 - 하고 싶은 일에도 우선순위를 지정하고, "이번 주" 버튼으로 할 일이 되면 그 우선순위를 적용해줘
 
-[먼저 나에게 물어볼 것]
-- 삭제를 영구 삭제로 할지, 되돌릴 수 있게 할지
+[참고]
+- 삭제는 논리 삭제(deleted_yn)로 확정했어. steering의 db-conventions를 따라줘.
 ```
 
 ## Spec 3, 4는 앞 spec이 끝난 뒤에

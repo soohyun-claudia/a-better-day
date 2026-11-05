@@ -6,7 +6,7 @@ inclusion: always
 
 ## 한 줄 요약
 일하는 동안 모니터에 띄워 두고 흘끗 확인하는 개인 업무용 상시 대시보드.
-내 일정, 할 일, 한 일, 하고 싶은 일을 한 화면에서 관리한다. (프로젝트 이름: 미정)
+내 일정, 할 일, 한 일, 하고 싶은 일을 한 화면에서 관리한다. (프로젝트 이름: A Better Day)
 
 ## 사용 환경과 전제
 - 사용자는 나 한 명이다. 로그인, 권한, 다중 사용자 기능은 만들지 않는다.
@@ -24,8 +24,10 @@ inclusion: always
   - MVP에서는 직접 입력한다. 외부 캘린더 연동은 나중 단계다.
 
 ## 데이터 모델 (개념)
-- task: id, title, status, priority, category, 마감(표현 방식 미정), done_at, created_at
-- event: id, title, start_at, end_at, location, memo
+- task: id, title, status, priority, category, due_date, due_time, done_at, created_at, updated_at, deleted_yn
+- event: id, title, start_at, end_at, location, memo, deleted_yn
+- 삭제는 논리 삭제다. deleted_yn으로 표시하고 화면과 집계에서는 제외한다.
+- 마감은 due_date와 due_time으로 저장한다. "이번 주"는 이번 주 일요일 날짜로 저장한다. (자세한 표기 규칙은 tech.md)
 
 ## 화면 구성 (한 화면: 상단 바 / 3단 / 하단 바)
 - **상단 바**: 날짜·요일과 시계(HH:mm), 지금 집중할 일 1개, 오늘 진행률(완료/전체 건수와 퍼센트 막대. 예: 3/7)
@@ -97,10 +99,12 @@ inclusion: always
 3. 나중에: Google Calendar 등 외부 일정 연동, 여러 기기에서 쓰기 위한 AWS 배포(인증 포함)
 
 ## 아직 정해지지 않은 것 (임의로 정하지 말고 나에게 물어볼 것)
-- 프로젝트 이름
 - 하고 싶은 일의 카테고리 목록 (프로토타입 샘플은 학습, 운동, 사이드 프로젝트)
 - priority 값 체계: 프로토타입은 높음/보통/낮음 3단계다. 이대로 확정할지 확인한다.
-- 마감 저장 방식: 프로토타입에는 시각이 있는 마감(15:00)과 날짜·기간만 있는 마감(내일, 11/6, 이번 주, 오늘 중)이 섞여 있다. DB에 어떻게 담을지 정한다.
 - "오늘 할 일"의 범위: 프로토타입은 마감일과 무관하게 TODO·DOING 전부를 보여준다. 이대로 할지 확인한다.
 - 타임라인 표시 시간대(09:00~19:00) 밖의 일정을 어떻게 보여줄지
-- 삭제 방식 (영구 삭제 / 되돌릴 수 있게)
+
+## 확정된 것
+- 프로젝트 이름: A Better Day
+- 마감 저장 방식: due_date + due_time, "이번 주"는 일요일 날짜로 저장
+- 삭제 방식: 논리 삭제 (deleted_yn)
