@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# 로컬 환경 설정 / 백업 (git 제외)
+.env
+backups/
