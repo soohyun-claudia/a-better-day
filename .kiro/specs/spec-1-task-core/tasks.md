@@ -27,14 +27,14 @@
 ## PHASE 2. DB 스키마 및 샘플 데이터
 
 ### T-03. Flyway V1 마이그레이션: task 테이블 생성
-- [ ] `V1__create_task.sql` 작성: task 테이블
+- [x] `V1__create_task.sql` 작성: task 테이블
   - `deleted_yn CHAR(1) NOT NULL DEFAULT 'N'` + `chk_task_deleted_yn` check 제약
   - check 제약: status, priority, due(due_time은 due_date 있을 때만), done_at(DONE ↔ done_at)
   - `uq_task_single_doing`: `WHERE status = 'DOING' AND deleted_yn = 'N'`
   - 조회 인덱스: `idx_task_status`, `idx_task_done_at` (partial, `AND deleted_yn = 'N'`)
 
 ### T-04. 개발용 샘플 데이터 스크립트
-- [ ] `scripts/dev-seed.sql` 작성 (Flyway 마이그레이션 아님, 수동 실행)
+- [x] `scripts/dev-seed.sql` 작성 (Flyway 마이그레이션 아님, 수동 실행)
   - WISH 7개 이상 (학습·운동·사이드 프로젝트 카테고리, HIGH·MEDIUM·LOW 우선순위 혼합)
   - TODO 4개 (마감 다양: 시각 있음, 오늘 중, 내일, 이번 주, 마감 없음)
   - DOING 1개

@@ -6,13 +6,13 @@ inclusion: always
 
 프로젝트 이름은 "A Better Day"다. 이름은 위치마다 아래 표기를 쓴다.
 
-| 쓰는 곳 | 표기 |
-|---|---|
-| 저장소, 폴더, 빌드 프로젝트명 | a-better-day |
-| Java 베이스 패키지 | com.abetterday |
-| Application 클래스 | ABetterDayApplication |
-| DB 이름, 볼륨 이름 | a_better_day |
-| 화면에 보이는 이름 | A Better Day |
+| 쓰는 곳 | 표기                    |
+|---|-----------------------|
+| 저장소, 폴더, 빌드 프로젝트명 | a-better-day          |
+| Java 베이스 패키지 | com.abetterday        |
+| Application 클래스 | AbetterdayApplication |
+| DB 이름, 볼륨 이름 | a_better_day          |
+| 화면에 보이는 이름 | A Better Day          |
 
 ```
 a-better-day/
