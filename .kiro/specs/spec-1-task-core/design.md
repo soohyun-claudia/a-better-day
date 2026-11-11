@@ -334,6 +334,9 @@ record WishPanel(
 - `MethodArgumentNotValidException` → 400, 필드별 한국어 메시지
 - `HttpMessageNotReadableException` → 400 (잘못된 JSON 본문·잘못된 enum 값)
 - `MethodArgumentTypeMismatchException` → 400 (쿼리 파라미터 타입 불일치)
+- `NoResourceFoundException`, `NoHandlerFoundException` → 404 `RESOURCE_NOT_FOUND` (리소스·핸들러 없음)
+- `HttpRequestMethodNotSupportedException` → 405 `METHOD_NOT_ALLOWED` (표준 예외의 Allow 헤더 보존)
+- `HttpMediaTypeNotSupportedException` → 415 `UNSUPPORTED_MEDIA_TYPE`
 - 그 외 → 500
 > 분류: 검증 실패·JSON/enum/파라미터 오류(400) · 없음(404) · 규칙 위반(409) · 그 외(500). 사용자에게 스택 트레이스·내부 정보 노출 금지.
 
