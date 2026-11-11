@@ -6,7 +6,7 @@
 [Browser: index.html + JS]
         │  REST (JSON) — 화면은 GET /api/dashboard 한 번, 쓰기는 /api/tasks
         ▼
-[Spring Boot 4.1.2 :8080]
+[Spring Boot 4.1.2 :8090]
   ├── TaskController       (/api/tasks)
   ├── DashboardController  (/api/dashboard)
   ├── TaskService / DashboardService
@@ -15,7 +15,7 @@
   └── Task (Entity)
         │  JDBC (HikariCP)
         ▼
-[PostgreSQL 17 :5432]
+[PostgreSQL 17 :5433]
   └── task 테이블 (Flyway 관리)
 ```
 
@@ -213,6 +213,7 @@ public class Task {
 | GET | /api/dashboard | 화면 전체 데이터 한 번 | - | 200, DashboardResponse |
 | PATCH | /api/tasks/{id} | 상태 전환 / 승격 (본문에 바꿀 값) | ChangeStatusRequest | 200, TaskResponse |
 
+> status 누락 요청(`{}` 등)은 400이다. (생성·상태 변경 공통)
 > 경로에 동사를 쓰지 않는다. 상태 전환·승격 모두 `PATCH /api/tasks/{id}` 본문 `{"status": ...}` 하나로 보내고, 부수 변경(기존 DOING→TODO, 승격 기본값)은 서버가 처리한다.
 
 **CreateTaskRequest** (record, Bean Validation)
@@ -221,7 +222,7 @@ record CreateTaskRequest(
     @NotBlank @Size(max = 200) String title,   // 생성자에서 앞뒤 공백 제거
     TaskStatus status,                          // 필수, 생성 시 WISH/TODO만
     TaskPriority priority,                      // 선택, 기본 MEDIUM
-    @Size(max = 50) String category,            // 선택
+    @Size(max = 50) String category,            // 선택, 빈 문자열은 null로 저장
     LocalDate dueDate,                          // 선택
     LocalTime dueTime                           // 선택, dueDate가 있을 때만
 ) {}
@@ -316,10 +317,11 @@ record WishPanel(
 4. Task 생성 → 저장 → 201 + TaskResponse
 
 **DashboardService.getDashboard()** — `@Transactional(readOnly = true)`
-1. 오늘 할 일: TODO·DOING을 정렬(DOING → priority → due → createdAt)해 최대 7개 + totalCount + hiddenCount
+1. 오늘 할 일: TODO·DOING을 정렬(DOING → priority → due → createdAt)해 최대 7개
+   - 마감(due) 정렬은 날짜 → 시각 순, 마감 없음은 뒤 + totalCount + hiddenCount
 2. 한 일: 오늘(서울 자정~) 완료를 doneAt 내림차순 최대 4개 + doneCount
 3. 하고 싶은 일: WISH를 생성 오름차순 최대 4개 + totalCount + hiddenCount
-4. 진행률: done / (남은 TODO·DOING + 오늘 완료) 퍼센트 (분모 0이면 0%)
+4. 진행률: done / (남은 TODO·DOING + 오늘 완료) 퍼센트 (분모 0이면 0%, 반올림한 정수 퍼센트)
 5. 상단 바: today(ISO)·dateLabel·doingTask(없으면 null)·progress
 6. 각 TaskResponse는 DueLabeler로 dueLabel·urgent 계산
 > 일정·하단 바는 이번 spec 범위 밖이라 빈/자리 데이터로 둔다.

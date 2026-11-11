@@ -10,17 +10,17 @@
 ## PHASE 1. 환경 설정
 
 ### T-01. docker-compose.yml 및 .env 구성
-- [ ] `docker-compose.yml` 작성: PostgreSQL 17, named volume `pgdata`, `restart: unless-stopped`, .env 참조
-  - DB 포트는 `127.0.0.1:5432:5432`로 로컬 바인딩 (외부 노출 금지)
-- [ ] `.env.example` 작성: `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT`
-- [ ] `.env` 작성 (git 제외)
-- [ ] `.gitignore`에 `.env`, `backups/` 포함 확인
+- [x] `docker-compose.yml` 작성: PostgreSQL 17, named volume `pgdata`, `restart: unless-stopped`, .env 참조
+  - DB 포트는 `127.0.0.1:5433:5432`로 로컬 바인딩 (외부 노출 금지)
+- [x] `.env.example` 작성: `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT`
+- [x] `.env` 작성 (git 제외)
+- [x] `.gitignore`에 `.env`, `backups/` 포함 확인
 
 ### T-02. Spring Boot 프로젝트 기본 설정
-- [ ] `build.gradle` 의존성 확인 및 추가: Spring Web, Spring Data JPA, Flyway, PostgreSQL Driver, Validation, Testcontainers, Lombok
-- [ ] `build.gradle` annotation processor 설정: `annotationProcessor 'org.projectlombok:lombok'`, 테스트용 `testAnnotationProcessor` (Gradle) 또는 `maven-compiler-plugin` annotation processor (Maven)
-- [ ] `application.yml`로 변환 (application.properties 제거): `spring.config.import: optional:file:.env[.properties]`로 .env 읽기, DB URL 환경 변수 참조, `ddl-auto=validate`, `open-in-view=false`, Flyway 설정
-- [ ] 앱 실행 후 DB 연결 및 Flyway 정상 동작 확인
+- [x] `build.gradle` 의존성 확인 및 추가: Spring Web, Spring Data JPA, Flyway, PostgreSQL Driver, Validation, Testcontainers, Lombok
+- [x] `build.gradle` annotation processor 설정: `annotationProcessor 'org.projectlombok:lombok'`, 테스트용 `testAnnotationProcessor` (Gradle) 또는 `maven-compiler-plugin` annotation processor (Maven)
+- [x] `application.yml`로 변환 (application.properties 제거): `spring.config.import: optional:file:.env[.properties]`로 .env 읽기, DB URL 환경 변수 참조, `ddl-auto=validate`, `open-in-view=false`, Flyway 설정
+- [x] 앱 실행 후 DB 연결 및 Flyway 정상 동작 확인
 
 ---
 
@@ -39,7 +39,7 @@
   - TODO 4개 (마감 다양: 시각 있음, 오늘 중, 내일, 이번 주, 마감 없음)
   - DOING 1개
   - DONE 3개 (done_at = 오늘 서울 시간대)
-- [ ] 앱이 자동으로 넣는 로더는 만들지 않음
+- [x] 앱이 자동으로 넣는 로더는 만들지 않음
 
 ---
 
@@ -125,17 +125,19 @@
 - [ ] `formatDeadline`/`isUrgent` 만들지 않음 (서버 dueLabel/urgent 그대로 표시)
 - [ ] 사용자 입력 텍스트는 `textContent`로 삽입 (XSS 방지)
 
-### T-17. app.js 작성
+### T-17a. app.js 작성 (갱신·로드)
 - [ ] `refreshAll()`: `fetchDashboard()` 후 각 패널 렌더링
 - [ ] 초기 로드 (`DOMContentLoaded`)
 - [ ] `setInterval(refreshAll, 30000)` 설정
 - [ ] 30초 갱신 시 포커스·입력 내용 보존 처리
 - [ ] 자정 감지: 날짜 변경 시 전체 재로드
+- [ ] API 실패 시 오류 토스트 표시, 기존 화면 유지
+
+### T-17b. app.js 작성 (이벤트·스타일)
 - [ ] 이벤트 위임: 체크 → `patchTask(id, {status:'DONE'})` → 재조회
 - [ ] 이벤트 위임: ▶ → `patchTask(id, {status:'DOING'})` → 재조회
 - [ ] 이벤트 위임: "이번 주" → `patchTask(id, {status:'TODO'})` → 재조회
 - [ ] 빠른 추가 Enter 처리: IME 조합 중 무시, 공백 무시, `dueDate: dashboard.topBar.today` 사용, 성공 시 입력창 초기화
-- [ ] API 실패 시 오류 토스트 표시, 기존 화면 유지
 - [ ] DOING 파란 점 깜빡임 애니메이션 (CSS, prefers-reduced-motion 대응)
 - [ ] 체크 버튼 호버 스타일 적용
 
@@ -184,7 +186,7 @@
 
 ### T-22. 통합 확인
 - [ ] `docker compose up -d` 후 앱 실행, Flyway V1 마이그레이션 성공 확인
-- [ ] 브라우저에서 `localhost:8080` 접속, `GET /api/dashboard`로 모든 패널 렌더링 확인
+- [ ] 브라우저에서 `localhost:8090` 접속, `GET /api/dashboard`로 모든 패널 렌더링 확인
 - [ ] 체크 → DONE, ▶ → DOING (기존 DOING → TODO), 이번 주 버튼 → TODO 승격 동작 확인 (모두 PATCH /api/tasks/{id})
 - [ ] 빠른 추가 Enter로 TODO 생성(due_date=서버 today), 공백 입력 무시 확인
 - [ ] 30초 자동 갱신(fetchDashboard) 중 입력창 포커스·내용 유지 확인
