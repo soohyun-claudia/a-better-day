@@ -1,0 +1,218 @@
+/* A Better Day 공통 스타일: 색은 :root 변수로만 정의한다. */
+:root {
+  --color-bg: #0b0d11;
+  --color-card: #141821;
+  --color-card-border: #262d3d;
+  --color-card-inner: #1b2030;
+  --color-divider: #222836;
+  --color-text: #eef0f4;
+  --color-text-muted: #98a0b0;
+  --color-blue: #62aeff;
+  --color-green: #6fd39a;
+  --color-orange: #ff9a52;
+  --color-red: #ff6b6b;
+  --color-input-border: #2f384b;
+  --color-btn-border: #3a4358;
+  --color-green-soft: rgba(111, 211, 154, 0.15);
+  --font-sans: "Noto Sans KR", system-ui, -apple-system, "Malgun Gothic", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --gap-base: clamp(0.5rem, 0.9vw, 1rem);
+  --radius-card: 0.75rem;
+}
+
+html,
+body {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body {
+  padding: var(--gap-base);
+  gap: var(--gap-base);
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: clamp(0.8rem, 0.85vw, 1rem);
+}
+
+/* 카드 공통 */
+.box_card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  padding: clamp(0.75rem, 1.2vw, 1.5rem);
+  min-height: 0;
+}
+
+.txt_muted {
+  color: var(--color-text-muted);
+}
+
+.tit_section {
+  margin: 0;
+  font-size: clamp(1rem, 1.25vw, 1.5rem);
+  font-weight: 700;
+}
+
+.txt_count {
+  color: var(--color-text-muted);
+  font-size: 0.85em;
+}
+
+.txt_count_done {
+  color: var(--color-green);
+  font-weight: 700;
+}
+
+/* 상단 바 */
+#topBar {
+  flex: 0 0 auto;
+}
+
+.time_clock {
+  font-family: var(--font-mono);
+  font-size: clamp(2rem, 3.4vw, 4rem);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.time_date {
+  font-weight: 700;
+  font-size: clamp(0.9rem, 1.1vw, 1.3rem);
+}
+
+.box_top_focus {
+  border-left: 1px solid var(--color-divider);
+  border-right: 1px solid var(--color-divider);
+}
+
+.ico_dot_doing {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background-color: var(--color-blue);
+}
+
+.txt_focus_title {
+  font-size: clamp(1.1rem, 1.7vw, 2rem);
+  font-weight: 700;
+}
+
+.box_progress {
+  min-width: 12rem;
+}
+
+.box_progress_bar {
+  height: 0.5rem;
+  background-color: var(--color-card-inner);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.box_progress_fill {
+  height: 100%;
+  width: 0;
+  background-color: var(--color-green);
+  border-radius: 999px;
+}
+
+.num_progress {
+  font-family: var(--font-mono);
+  font-size: clamp(1.6rem, 2.8vw, 3.4rem);
+  font-weight: 700;
+  color: var(--color-green);
+  line-height: 1;
+}
+
+/* 3단 영역 */
+#mainContent {
+  flex: 1 1 0;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr 1.45fr 1fr;
+  gap: var(--gap-base);
+}
+
+#mainContent > section,
+.wrap_right_panels {
+  min-height: 0;
+}
+
+.wrap_right_panels > section {
+  flex: 1 1 0;
+}
+
+#sectionDone {
+  flex: 0.75 1 0;
+}
+
+.list_scroll_hide {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* 할 일 입력창 */
+.box_task_add {
+  border: 1px solid var(--color-input-border);
+  border-radius: 0.6rem;
+  background-color: var(--color-card);
+  padding: 0.6rem 0.9rem;
+}
+
+.tf_task_add {
+  background: transparent;
+  border: 0;
+  color: var(--color-text);
+  outline: 0;
+  width: 100%;
+  font-size: 1.05em;
+}
+
+.tf_task_add::placeholder {
+  color: var(--color-text-muted);
+}
+
+.box_task_add:focus-within {
+  border-color: var(--color-blue);
+}
+
+/* 버튼 공통 */
+.btn_icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 1px solid var(--color-btn-border);
+  background: transparent;
+  color: var(--color-text);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.btn_icon:focus-visible,
+.tf_task_add:focus-visible {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+}
+
+/* 하단 바 */
+#bottomBar {
+  flex: 0 0 clamp(5.5rem, 12vh, 9rem);
+  display: grid;
+  grid-template-columns: 0.6fr 2.2fr 1.5fr;
+  gap: var(--gap-base);
+}
+
+#bottomBar > section {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.num_week_done {
+  font-family: var(--font-mono);
+  font-size: clamp(1.8rem, 3vw, 3.4rem);
+  font-weight: 700;
+  color: var(--color-green);
+  line-height: 1;
+}

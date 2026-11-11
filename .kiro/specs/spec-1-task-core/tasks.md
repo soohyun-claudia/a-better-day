@@ -98,16 +98,16 @@
 ## PHASE 4. 프론트엔드
 
 ### T-13. 정적 파일 기반 구성
-- [ ] `static/vendor/bootstrap-5.3.8/` 파일 확인 (이미 있음, 다운로드 불필요)
-- [ ] `common.css` 작성: `:root` CSS 변수, 기본 레이아웃 스타일
+- [x] `static/vendor/bootstrap-5.3.8/` 파일 확인 (이미 있음, 다운로드 불필요)
+- [x] `common.css` 작성: `:root` CSS 변수, 기본 레이아웃 스타일
   - (글꼴 `@font-face`는 별도 task에서 추가, 이번 task에서는 글꼴 없이 진행)
 
 ### T-14. index.html 기본 레이아웃
-- [ ] `index.html` 작성: `data-bs-theme="dark"`, 100vh 고정, 스크롤 방지
-- [ ] Bootstrap 연결: `/vendor/bootstrap-5.3.8/css/bootstrap.min.css`, `/vendor/bootstrap-5.3.8/js/bootstrap.bundle.min.js` (일반 `<script>` 먼저), `/js/app.js` (`type="module"`)
-- [ ] 상단 바 HTML 골격: 시계, 날짜·요일, 집중할 일, 진행률
-- [ ] 3단 레이아웃 HTML 골격 (id camelCase): `#sectionSchedule`(자리), `#sectionTodo`, `.wrap_right_panels`(`#sectionDone`, `#sectionWish`)
-- [ ] 하단 바 HTML 골격 (자리, `#bottomBar`)
+- [x] `index.html` 작성: `data-bs-theme="dark"`, 100vh 고정, 스크롤 방지
+- [x] Bootstrap 연결: `/vendor/bootstrap-5.3.8/css/bootstrap.min.css`, `/vendor/bootstrap-5.3.8/js/bootstrap.bundle.min.js` (일반 `<script>` 먼저), `/js/app.js` (`type="module"`)
+- [x] 상단 바 HTML 골격: 시계, 날짜·요일, 집중할 일, 진행률
+- [x] 3단 레이아웃 HTML 골격 (id camelCase): `#sectionSchedule`(자리), `#sectionTodo`, `.wrap_right_panels`(`#sectionDone`, `#sectionWish`)
+- [x] 하단 바 HTML 골격 (자리, `#bottomBar`)
 
 ### T-15. api.js 작성
 - [ ] `fetchDashboard()` — GET /api/dashboard (화면 전체)

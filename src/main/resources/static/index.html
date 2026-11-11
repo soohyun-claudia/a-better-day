@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko" data-bs-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Better Day</title>
+  <link rel="stylesheet" href="/vendor/bootstrap-5.3.8/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/common.css">
+</head>
+<body class="d-flex flex-column">
+
+  <header id="topBar" class="box_card d-flex align-items-center p-0">
+    <div class="d-flex align-items-center gap-3 px-4 py-3 flex-shrink-0">
+      <time id="clockTime" class="time_clock">--:--</time>
+      <div>
+        <div id="topDate" class="time_date">&nbsp;</div>
+        <div id="topWeekday" class="txt_muted small">&nbsp;</div>
+      </div>
+    </div>
+    <div class="box_top_focus d-flex flex-column justify-content-center flex-grow-1 px-4 py-3 align-self-stretch">
+      <div class="txt_muted small">지금 집중할 일</div>
+      <div class="d-flex align-items-center gap-3">
+        <span id="focusDot" class="ico_dot_doing" aria-hidden="true"></span>
+        <div id="focusTitle" class="txt_focus_title text-truncate">-</div>
+      </div>
+    </div>
+    <div class="d-flex align-items-center gap-4 px-4 py-3 flex-shrink-0">
+      <div class="box_progress flex-grow-1">
+        <div id="progressLabel" class="txt_muted small mb-2">오늘 진행률</div>
+        <div class="box_progress_bar"><div id="progressFill" class="box_progress_fill"></div></div>
+      </div>
+      <div id="progressNum" class="num_progress">0/0</div>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <section id="sectionSchedule" class="box_card d-flex flex-column">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="tit_section">오늘 일정</h2>
+        <span class="txt_count">Spec 3에서 구현 예정</span>
+      </div>
+      <div id="scheduleBody" class="flex-grow-1 list_scroll_hide"></div>
+    </section>
+
+    <section id="sectionTodo" class="box_card d-flex flex-column">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="tit_section">오늘 할 일</h2>
+        <span id="todoCount" class="txt_count"></span>
+      </div>
+      <ul id="listTodo" class="list-unstyled m-0 flex-grow-1 list_scroll_hide d-flex flex-column gap-2"></ul>
+      <div id="todoHiddenNote" class="txt_muted small text-center mt-2"></div>
+      <div class="box_task_add d-flex align-items-center gap-2 mt-3">
+        <span class="txt_muted" aria-hidden="true">+</span>
+        <input id="tfTodoAdd" class="tf_task_add" type="text" maxlength="200"
+               placeholder="할 일을 입력하고 Enter" aria-label="할 일 추가" autocomplete="off">
+      </div>
+    </section>
+
+    <div class="wrap_right_panels d-flex flex-column gap-3">
+      <section id="sectionDone" class="box_card d-flex flex-column">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="tit_section">한 일</h2>
+          <span id="doneCount" class="txt_count_done"></span>
+        </div>
+        <ul id="listDone" class="list-unstyled m-0 flex-grow-1 list_scroll_hide"></ul>
+      </section>
+
+      <section id="sectionWish" class="box_card d-flex flex-column">
+        <div class="d-flex align-items-center justify-content-between mb-3">
+          <h2 class="tit_section">하고 싶은 일</h2>
+          <span id="wishCount" class="txt_count"></span>
+        </div>
+        <ul id="listWish" class="list-unstyled m-0 flex-grow-1 list_scroll_hide d-flex flex-column gap-2"></ul>
+        <div id="wishHiddenNote" class="txt_muted small text-center mt-2"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer id="bottomBar">
+    <section id="boxWeekDone" class="box_card d-flex flex-column justify-content-center">
+      <div class="txt_muted">이번 주 완료</div>
+      <div class="d-flex align-items-baseline gap-2">
+        <span id="weekDoneNum" class="num_week_done">-</span>
+        <span class="txt_muted">건</span>
+      </div>
+    </section>
+    <section id="boxWeekdayDone" class="box_card d-flex align-items-center">
+      <div class="txt_muted">Spec 4에서 구현 예정</div>
+    </section>
+    <section id="boxTomorrow" class="box_card d-flex align-items-center">
+      <div class="txt_muted">내일 일정</div>
+    </section>
+  </footer>
+
+  <script src="/vendor/bootstrap-5.3.8/js/bootstrap.bundle.min.js"></script>
+  <script type="module" src="/js/app.js"></script>
+</body>
+</html>
