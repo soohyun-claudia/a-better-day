@@ -7,7 +7,6 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -64,11 +63,11 @@ public class DueLabeler {
 
     /**
      * 시각이 있는 마감의 문구와 긴급 여부를 만든다.
-     * 초 단위 흔들림을 없애려고 현재 시각과 마감 시각을 분 단위로 맞춰 비교한다.
+     * 절삭하지 않은 두 시각의 차이를 먼저 구하고, 그 차이의 초를 0 방향으로 버린 분 값을 문구와 긴급 판정에 함께 쓴다.
      */
     private Due timedDue(LocalDate dueDate, Task task) {
-        LocalDateTime target = dueDate.atTime(task.getDueTime()).truncatedTo(ChronoUnit.MINUTES);
-        LocalDateTime now = LocalDateTime.now(clock).truncatedTo(ChronoUnit.MINUTES);
+        LocalDateTime target = dueDate.atTime(task.getDueTime());
+        LocalDateTime now = LocalDateTime.now(clock);
         long diff = Duration.between(now, target).toMinutes();
 
         String label = datePrefix(dueDate) + target.format(TIME_FORMAT) + " 마감" + remainSuffix(diff);
