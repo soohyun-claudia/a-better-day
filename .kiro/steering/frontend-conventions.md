@@ -61,6 +61,7 @@ Bootstrap이 제공하는 클래스(d-flex, gap-2, btn 등)는 그대로 쓰고,
 - 숨김 텍스트는 Bootstrap의 visually-hidden을 쓴다. 원본 규칙의 예약어(daumIndex 등)와 ir_pm, screen_out 같은 클래스는 쓰지 않는다.
 
 ## 레이아웃
+- 화면 구조는 HTML과 바닐라 JavaScript로 만들고, 레이아웃·유틸리티·공통 UI 뼈대는 Bootstrap 5.3.8을 우선 사용한다. 행·열·정렬·간격·표시 여부·크기 조정은 Bootstrap의 grid, flex, spacing, display, sizing 유틸리티를 활용한다.
 - 전체 높이는 100vh로 고정하고 페이지 스크롤은 막는다. 상단 바, 3단, 하단 바는 Bootstrap의 d-flex, flex-column, gap 유틸리티로 구성한다.
 - 기준 해상도는 1920×1080이다. 글자 크기와 간격은 px 고정이 아니라 rem이나 clamp()로 잡아서, 해상도가 달라져도 한 화면에 들어오게 한다.
 - 일정 타임라인은 Bootstrap으로 부족하므로 직접 CSS를 쓴다. 일정 카드는 position: absolute로 두고, top과 height는 서버가 내려준 startMinute(09:00 기준 분)와 durationMinutes에 1분당 0.9px을 곱해 JS로 설정한다. 시각 계산이나 정렬은 프론트에서 하지 않는다. (tech.md의 역할 분리 규칙) 프로토타입 기준으로 표시 범위는 09:00~19:00(높이 540px), 1분당 0.9px이다. 일정 카드는 최소 24px로 하고, 높이가 48px 미만이면 "시각 제목"을 한 줄로 표시한다.
@@ -98,6 +99,7 @@ Bootstrap이 제공하는 클래스(d-flex, gap-2, btn 등)는 그대로 쓰고,
 
 ## 편집 모달
 - 편집 모달은 Bootstrap 5.3.8의 Modal 컴포넌트를 쓰고, 다크 테마와 프로토타입의 색·글자 크기를 따른다.
+- 토스트 알림은 Bootstrap 5.3.8의 Toast 컴포넌트를 뼈대로 사용한다. 표시·숨김과 메시지 주입은 바닐라 JavaScript로 처리하고, 색·크기·위치는 `common.css`에서 프로젝트 규칙에 맞게 보완한다.
 - 모달이 열려 있는 동안에는 자동 갱신이 모달의 입력 내용과 포커스를 바꾸지 않는다. 뒤쪽 목록만 갱신한다.
 - 모달이 열릴 때 첫 입력창에 포커스를 둔다. Esc로 닫고, Enter로 저장한다. (한글 IME 조합 중 Enter는 무시)
 - 삭제는 모달 안에서 확인 단계를 한 번 더 거친다. 별도의 브라우저 confirm 창은 쓰지 않는다.

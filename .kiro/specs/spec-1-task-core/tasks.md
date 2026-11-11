@@ -46,19 +46,19 @@
 ## PHASE 3. 백엔드 도메인 및 API
 
 ### T-05. 공통 예외 처리
-- [ ] `ErrorResponse` record 작성
-- [ ] `BusinessException` 작성: code, message, HttpStatus(400/404/409)
-- [ ] `GlobalExceptionHandler` 작성: BusinessException(400/404/409)·MethodArgumentNotValidException(400)·HttpMessageNotReadableException(400, 잘못된 JSON/enum)·MethodArgumentTypeMismatchException(400, 쿼리 파라미터 타입 불일치)·그 외(500)
+- [x] `ErrorResponse` record 작성
+- [x] `BusinessException` 작성: code, message, HttpStatus(400/404/409)
+- [x] `GlobalExceptionHandler` 작성: BusinessException(400/404/409)·MethodArgumentNotValidException(400)·HttpMessageNotReadableException(400, 잘못된 JSON/enum)·MethodArgumentTypeMismatchException(400, 쿼리 파라미터 타입 불일치)·그 외(500)
 
 ### T-06. 공통 설정 (Clock, JPA)
-- [ ] `ClockConfig` 작성: `Clock.system(ZoneId.of("Asia/Seoul"))` 빈
-- [ ] `JpaConfig` 작성 (필요 시)
+- [x] `ClockConfig` 작성: `Clock.system(ZoneId.of("Asia/Seoul"))` 빈
+- [x] `JpaConfig` 작성 (필요 시) → 필요한 설정이 없어 생략
 
 ### T-07. Task 도메인 모델
-- [ ] `TaskStatus` enum: WISH, TODO, DOING, DONE
-- [ ] `TaskPriority` enum: HIGH, MEDIUM, LOW
-- [ ] `DeletedYnConverter` (AttributeConverter): 'Y'/'N' ↔ boolean 한 곳
-- [ ] `Task` entity 작성
+- [x] `TaskStatus` enum: WISH, TODO, DOING, DONE
+- [x] `TaskPriority` enum: HIGH, MEDIUM, LOW
+- [x] `DeletedYnConverter` (AttributeConverter): 'Y'/'N' ↔ boolean 한 곳
+- [x] `Task` entity 작성
   - `@Getter`, `@NoArgsConstructor(access = AccessLevel.PROTECTED)`, `@SQLRestriction("deleted_yn = 'N'")`
   - `@Enumerated(EnumType.STRING)` (status, priority)
   - `deleted` 필드: `@Column(name = "deleted_yn")` + `@Convert(converter = DeletedYnConverter.class)`
@@ -66,32 +66,32 @@
   - 도메인 메서드: `markDone(OffsetDateTime)`, `markDoing()`, `markTodo()`, `promote(LocalDate)` — DONE 외 전환은 done_at null
 
 ### T-08. TaskRepository
-- [ ] `TaskRepository` 작성 (`JpaRepository<Task, Long>`)
-- [ ] `findByStatusIn(List<TaskStatus>)` 메서드 추가
-- [ ] `findFirstByStatus(TaskStatus)` 메서드 추가 (DOING 단건 조회)
-- [ ] `findDoneToday(OffsetDateTime start, OffsetDateTime end)` (오늘 완료 조회, doneAt 내림차순)
+- [x] `TaskRepository` 작성 (`JpaRepository<Task, Long>`)
+- [x] `findByStatusIn(List<TaskStatus>)` 메서드 추가
+- [x] `findFirstByStatus(TaskStatus)` 메서드 추가 (DOING 단건 조회)
+- [x] `findDoneToday(OffsetDateTime start, OffsetDateTime end)` (오늘 완료 조회, doneAt 내림차순)
 
 ### T-09. DueLabeler (마감 표기·긴급 계산, 한 곳)
-- [ ] `DueLabeler` 작성: `Clock` 주입, `Task` → `dueLabel`·`urgent` 계산
-- [ ] 규칙: due_time 있으면 날짜 접두어(오늘 생략/내일/"M/D ") + "HH:mm 마감" + 남음/지남 문구(지남: 분/시간분/일, 2시간 이내 남음: 분/"1시간 남음"(정확히 60)/"1시간 M분 남음", 2시간+ 남음은 문구 없음; urgent=지남 또는 2시간 이내), due_time 없으면 지남/오늘 중/내일/이번 주 일요일/M/D (urgent=false), due_date 없으면 "마감 없음"
+- [x] `DueLabeler` 작성: `Clock` 주입, `Task` → `dueLabel`·`urgent` 계산
+- [x] 규칙: due_time 있으면 날짜 접두어(오늘 생략/내일/"M/D ") + "HH:mm 마감" + 남음/지남 문구(지남: 분/시간분/일, 2시간 이내 남음: 분/"1시간 남음"(정확히 60)/"1시간 M분 남음", 2시간+ 남음은 문구 없음; urgent=지남 또는 2시간 이내), due_time 없으면 지남/오늘 중/내일/이번 주 일요일/M/D (urgent=false), due_date 없으면 "마감 없음"
 
 ### T-10. TaskService
-- [ ] `Clock` 주입받아 사용 (`LocalDate.now(clock)` 직접 `LocalDate.now()` 금지)
-- [ ] `createTask(CreateTaskRequest)` 구현 (title 공백 제거, status는 WISH/TODO만·위반 시 400, due_time은 due_date 있을 때만·단독이면 400)
-- [ ] `getTasks(List<TaskStatus>)` 구현
-- [ ] `changeStatus(Long, TaskStatus)` 구현: 전환 규칙 검사(409) + DOING 단일 규칙(flush 순서) + WISH→TODO 승격(due_date=이번 주 일요일, priority=MEDIUM), `@Transactional`
-- [ ] `TaskResponse` 매핑 시 DueLabeler로 dueLabel·urgent 계산
+- [x] `Clock` 주입받아 사용 (`LocalDate.now(clock)` 직접 `LocalDate.now()` 금지)
+- [x] `createTask(CreateTaskRequest)` 구현 (title 공백 제거, status는 WISH/TODO만·위반 시 400, due_time은 due_date 있을 때만·단독이면 400)
+- [x] `getTasks(List<TaskStatus>)` 구현
+- [x] `changeStatus(Long, TaskStatus)` 구현: 전환 규칙 검사(409) + DOING 단일 규칙(flush 순서) + WISH→TODO 승격(due_date=이번 주 일요일, priority=MEDIUM), `@Transactional`
+- [x] `TaskResponse` 매핑 시 DueLabeler로 dueLabel·urgent 계산
 
 ### T-11. TaskController
-- [ ] `POST /api/tasks` 구현 (201 + Location)
-- [ ] `GET /api/tasks` 구현 (status 쿼리 파라미터, 쉼표 구분 다중 값)
-- [ ] `PATCH /api/tasks/{id}` 구현 (본문 `{"status": ...}`, 상태 전환·승격)
+- [x] `POST /api/tasks` 구현 (201 + Location)
+- [x] `GET /api/tasks` 구현 (status 쿼리 파라미터, 쉼표 구분 다중 값)
+- [x] `PATCH /api/tasks/{id}` 구현 (본문 `{"status": ...}`, 상태 전환·승격)
 
 ### T-12. Dashboard (조회 전용)
-- [ ] `DashboardResponse` 및 중첩 record(TopBar, ProgressData, TodayTodoPanel, DonePanel, WishPanel) 작성
-- [ ] `DashboardService` 작성: 정렬·최대 7/4개·숨김 건수·진행률(분모 0이면 0%)·오늘 완료 집계·today/dateLabel/doingTask 조립 (`@Transactional(readOnly = true)`)
-- [ ] `DashboardController` 작성: `GET /api/dashboard`
-- [ ] 일정·하단 바는 빈/자리 데이터로 둠
+- [x] `DashboardResponse` 및 중첩 record(TopBar, ProgressData, TodayTodoPanel, DonePanel, WishPanel) 작성
+- [x] `DashboardService` 작성: 정렬·최대 7/4개·숨김 건수·진행률(분모 0이면 0%)·오늘 완료 집계·today/dateLabel/doingTask 조립 (`@Transactional(readOnly = true)`)
+- [x] `DashboardController` 작성: `GET /api/dashboard`
+- [x] 일정·하단 바는 빈/자리 데이터로 둠
 
 ---
 

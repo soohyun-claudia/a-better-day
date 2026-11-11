@@ -9,6 +9,7 @@ inclusion: always
 - 백엔드: Java 25 (LTS), Spring Boot 4.1.2, Spring Web, Spring Data JPA(Hibernate), Bean Validation, Flyway, Lombok
 - DB: PostgreSQL (로컬 Docker Compose). Oracle, H2는 쓰지 않는다.
 - 프론트: HTML, Bootstrap 5.3.8, 바닐라 JavaScript. React 등 프레임워크, 번들러, npm 빌드는 쓰지 않는다. Bootstrap 6은 알파라서 쓰지 않는다.
+- 화면단은 HTML과 바닐라 JavaScript로 구현하되, 레이아웃·간격·정렬·반응형 배치 같은 기본 뼈대와 유틸리티는 Bootstrap의 grid, flex, spacing, sizing, display 유틸리티를 우선 사용한다. 모달과 토스트 같은 공통 UI 뼈대도 Bootstrap 컴포넌트를 사용하고, 프로젝트 고유의 시각 표현과 세부 동작만 `common.css`와 바닐라 JavaScript로 보완한다.
 - Bootstrap은 bootstrap.bundle.min.js(UMD, Popper 포함)를 static/vendor/에 로컬 파일로 두고, index.html에서 일반 <script>로 먼저 불러온다. 앱 코드(ES 모듈)는 window.bootstrap으로 접근하며 Bootstrap 파일을 ESM으로 import하지 않는다. Bootstrap JS API 호출은 modal.js 한 파일에서만 한다.
 - 서버는 Spring Boot가 정적 파일(src/main/resources/static)과 REST API를 함께 제공한다.
 - 로그인과 Spring Security는 넣지 않는다. (나중에 AWS 배포 단계에서 검토)
