@@ -107,6 +107,7 @@ LocalDate thisSunday = today.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY)
 | 그 외 | "M/D 마감" |
 
 > **주의**: "이번 주 마감" 판정은 `due_date`가 정확히 이번 주 일요일과 일치할 때만 적용한다.  
+> **일요일 당일**: 오늘이 일요일이면 `nextOrSame(SUNDAY)`는 오늘을 가리키지만, `due_date == 오늘`이 먼저 적용되어 표시는 "오늘 중"이다. "이번 주 마감"은 월~토에 저장된 이번 주 일요일 마감에만 나타난다.  
 > 다음 주가 되면 동일한 날짜가 "M/D 마감"(지난 날짜)으로 자연스럽게 변한다.  
 > 사용자가 직접 이번 주 일요일을 날짜로 지정해도 동일하게 "이번 주 마감"으로 표시된다(Spec 2 이후 해당).
 
@@ -352,6 +353,12 @@ record ErrorResponse(String code, String message) {}
 `DueLabeler`가 `Clock`을 주입받아 `Task` → `dueLabel`·`urgent`를 계산한다.  
 `dueDate`는 `LocalDate`, `dueTime`은 `LocalTime` 또는 null, `now`는 `OffsetDateTime.now(clock)` 기준.
 
+**확정 사항 (D02)**
+- 남은 시간 분 값 `minutes`는 `target - now`의 초 단위 원본에서 초를 버린 분(0 방향 절삭)이다. 라벨과 urgent 판정은 이 `minutes` 하나를 공통으로 쓴다.
+- 119분 59초 남음 → minutes = 119 → urgent = true. 정확히 120분 남음 → minutes = 120 → urgent = false.
+- 마감 후 60초 미만 → minutes = 0 → "지금 마감"(urgent = true). 60초가 지나야 "1분 지남"이 된다. 마감 전 60초 미만도 절삭 결과 0이므로 같은 "지금 마감"이다.
+- 시각 없는 마감의 라벨 우선순위: 지남(due_date < 오늘, "M/D 마감") → 오늘 중 → 내일 마감 → 이번 주 마감 → M/D 마감. 일요일 당일 마감은 "오늘 중"이다.
+
 ```
 [due_date == null]
   → dueLabel = "마감 없음", urgent = false
@@ -361,16 +368,16 @@ record ErrorResponse(String code, String message) {}
   날짜 접두어: due_date == 오늘 → "" / == 내일 → "내일 " / 그 외 → "M/D "
     예: "15:00 마감", "내일 15:00 마감", "11/8 15:00 마감"
   기본 = 접두어 + "HH:mm 마감"
-  diff = (target - now) (분 단위, 서울 기준)
-  urgent = (diff < 120)   // 2시간 이내 남음 또는 지남
-  diff < 0 (지남):
-    |diff| < 60         → " · N분 지남"               (urgent = true)
-    60 <= |diff| < 1440 → " · N시간 M분 지남"          (urgent = true, M=0이면 "N시간 지남")
-    |diff| >= 1440      → " · N일 지남"                (urgent = true, N = floor(|diff|/1440))
-  diff == 0             → " · 지금 마감"               (urgent = true)
-  0 < diff < 60         → " · N분 남음"                (urgent = true)
-  60 <= diff < 120      → " · 1시간 남음"(정확히 60) / " · 1시간 M분 남음"(M>0)  (urgent = true)
-  diff >= 120           → (접미어 없음)                (urgent = false)
+  minutes = (target - now)의 초 단위 값 / 60 (0 방향 절삭, 서울 기준)
+  urgent = (minutes < 120)   // 2시간 이내 남음 또는 지남
+  minutes < 0 (지남, 마감 후 60초 이상):
+    |minutes| < 60         → " · N분 지남"               (urgent = true)
+    60 <= |minutes| < 1440 → " · N시간 M분 지남"          (urgent = true, M=0이면 "N시간 지남")
+    |minutes| >= 1440      → " · N일 지남"                (urgent = true, N = floor(|minutes|/1440))
+  minutes == 0          → " · 지금 마감"               (urgent = true, 마감 후 60초 미만 포함)
+  0 < minutes < 60      → " · N분 남음"                (urgent = true)
+  60 <= minutes < 120   → " · 1시간 남음"(정확히 60) / " · 1시간 M분 남음"(M>0)  (urgent = true)
+  minutes >= 120        → (접미어 없음)                (urgent = false)
   → dueLabel = 기본 + 접미어
 
 [due_date != null, due_time == null]  — 아래 순서로 판정
@@ -532,11 +539,11 @@ WISH 7개 (카테고리·우선순위 다양) + TODO 4개 (마감 다양) + DOIN
 
 | 테스트 케이스 | 검증 내용 |
 |---|---|
-| 시각 마감 긴급 경계 | 정확히 2시간 남음(urgent=false) / 2시간 미만(urgent=true) / 0분(지금 마감) / 지남(urgent=true) |
+| 시각 마감 긴급 경계 | 정확히 2시간 남음(urgent=false) / 2시간 미만(urgent=true) / 119분 59초 남음(urgent=true, 119분으로 절삭) / 0분(지금 마감) / 마감 후 59초(지금 마감) / 마감 후 60초(1분 지남, urgent=true) |
 | 시각 마감 문구 | "N분 남음", "1시간 남음"(정확히 60분), "1시간 M분 남음", "N분 지남", "N시간 M분 지남", "N일 지남" |
 | 날짜 접두어 | 오늘(생략) / 내일("내일 ") / 그 외("M/D ") |
 | 자정 전후 | 오늘 23:59 vs 내일 00:01 (서울 자정 기준 날짜 비교) |
-| 일요일 경계 | 오늘이 일요일일 때 `nextOrSame(SUNDAY)`가 오늘 → "이번 주 마감" |
+| 일요일 경계 | 오늘이 일요일일 때 `nextOrSame(SUNDAY)`가 오늘을 가리키고, 라벨은 "오늘 중"(due_date == 오늘이 우선, "이번 주 마감" 아님) |
 | 시각 없는 마감 | due_date < 오늘/==오늘/==내일/==이번 주 일요일/그 외, 항상 urgent=false |
 | 마감 없음 | due_date == null → "마감 없음", urgent=false |
 
